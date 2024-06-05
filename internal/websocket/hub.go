@@ -8,7 +8,7 @@ import (
 
 // Hub хранит активные подключения и управляет передачей сообщений между ними.
 type Hub struct {
-	Clients    map[*Client]bool // Активные клиенты
+	Clients    map[*Client]bool // Клиенты, подключенные к хабу
 	Broadcast  chan []byte      // Канал для рассылки сообщений
 	register   chan *Client     // Канал для регистрации новых клиентов
 	unregister chan *Client     // Канал для удаления клиентов
@@ -17,10 +17,10 @@ type Hub struct {
 // Новый экземпляр Hub
 func NewHub() *Hub {
 	return &Hub{
-		Broadcast:  make(chan []byte),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
-		Clients:    make(map[*Client]bool),
+		Broadcast:  make(chan []byte),      // Создание канала для широковещательной рассылки сообщений
+		register:   make(chan *Client),     // Создание канала для регистрации новых клиентов
+		unregister: make(chan *Client),     // Создание канала для удаления клиентов
+		Clients:    make(map[*Client]bool), // Создание карты для хранения зарегистрированных клиентов
 	}
 }
 
