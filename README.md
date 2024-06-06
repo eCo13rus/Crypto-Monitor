@@ -14,12 +14,13 @@ Crypto Monitor - это приложение для мониторинга це�
 - Gin (Web Framework)
 - Redis (Кэширование)
 - CoinGecko API
+- Docker
 
 ## Установка
 
 ### Требования
 
-- Go 1.16*
+- Go 1.20*
 - Redis
 
 ### Шаги установки
@@ -43,7 +44,9 @@ Crypto Monitor - это приложение для мониторинга це�
 
     ```json
     {
-        "redis_addr": "localhost:6379"
+    "redis_addr": "localhost:6379",
+    "supported_cryptos": ["bitcoin", "ethereum", "dogecoin"],
+    "supported_currencies": ["usd", "eur", "rub"]
     }
     ```
 
@@ -65,6 +68,20 @@ Crypto Monitor - это приложение для мониторинга це�
 
     ```bash
     ./crypto-monitor
+    ```
+7. **При локальном запуске:**"
+
+    ```bash
+      export CONFIG_PATH=.
+      export REDIS_ADDR=localhost:6379
+    ./crypto-monitor
+   ```
+8. **При запуске Docker:**
+
+    ```bash
+      sudo docker-compose down
+      sudo docker-compose build
+      sudo docker-compose up
     ```
 
 ## Использование
@@ -99,7 +116,7 @@ Crypto Monitor - это приложение для мониторинга це�
 
 ## Разработчики
 
-- Илья
+- Илья https://t.me/eCo13reg
 
 ## Лицензия
 

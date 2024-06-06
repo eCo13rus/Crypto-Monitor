@@ -5,6 +5,7 @@ import (
 	"crypto-monitor/internal/config"
 	"github.com/go-redis/redis/v8"
 	"log"
+	"os"
 )
 
 // Объявление переменной глобального клиента Redis
@@ -14,9 +15,15 @@ var redisClient *redis.Client
 func InitializeRedis() {
 	log.Println("Инициализация Redis клиента...")
 
+	// Проверка переменной окружения перед использованием конфигурации файлов
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = config.AppConfig.RedisAddr
+	}
+
 	// Конфигурация Redis клиента на основе конфигурации приложения
 	redisClient = redis.NewClient(&redis.Options{
-		Addr: config.AppConfig.RedisAddr,
+		Addr: redisAddr,
 	})
 
 	// Пинг к Redis для проверки подключения

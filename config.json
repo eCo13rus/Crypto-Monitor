@@ -1,5 +1,5 @@
 {
-  "redis_addr": "localhost:6379",
+  "redis_addr": "redis:6379",
   "supported_cryptos": ["bitcoin", "ethereum", "dogecoin"],
   "supported_currencies": ["usd", "eur", "rub"]
 }

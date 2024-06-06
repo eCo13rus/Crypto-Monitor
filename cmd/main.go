@@ -19,10 +19,12 @@ const (
 )
 
 func main() {
-	// Загружаем переменные окружения из файла .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Ошибка загрузки .env файла: %v", err)
+	// Загружаем переменные окружения из файла .env, если он существует
+	if _, err := os.Stat(".env"); err == nil {
+		err = godotenv.Load()
+		if err != nil {
+			log.Fatalf("Ошибка загрузки .env файла: %v", err)
+		}
 	}
 
 	// Определяем режим работы Gin
@@ -43,16 +45,21 @@ func main() {
 	updater := monitors.NewUpdater()
 	go updater.Start()
 
+	// Определяем порт из переменной окружения или используем порт по умолчанию
+	port := os.Getenv("APP_PORT")
+	if port == "" {
+		port = DefaultPort
+	}
+
 	// Инициализация маршрутов
 	router := gin.Default()
 	api.RegisterRoutes(router)
-
-	log.Println("Сервер запущен на порту", DefaultPort)
+	log.Println("Сервер запущен на порту", port)
 
 	// Запуск HTTP сервера
-	err = http.ListenAndServe(fmt.Sprintf(":%s", DefaultPort), router)
+	err := http.ListenAndServe(fmt.Sprintf(":%s", port), router)
 	if err != nil {
-		log.Printf("Ошибка запуска на порту %s: %v", DefaultPort, err)
+		log.Printf("Ошибка запуска на порту %s: %v", port, err)
 		log.Println("Попытка запуска на порту", FallbackPort)
 		err = http.ListenAndServe(fmt.Sprintf(":%s", FallbackPort), router)
 		if err != nil {
